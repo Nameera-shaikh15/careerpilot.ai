@@ -1,136 +1,107 @@
+import MainLayout from "../layouts/MainLayout";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import {
-  User,
   FileText,
-  Target,
-  Briefcase,
-  TrendingUp,
+  Brain,
+  Map,
+  Mic,
 } from "lucide-react";
 
-import Sidebar from "../components/Sidebar";
-
 function Dashboard() {
-  const cards = [
-    {
-      title: "Resume Score",
-      value: "88%",
-      icon: <FileText size={32} />,
-      color: "text-cyan-400",
-    },
-    {
-      title: "Career Match",
-      value: "AI Engineer",
-      icon: <Target size={32} />,
-      color: "text-green-400",
-    },
-    {
-      title: "Roadmap Progress",
-      value: "72%",
-      icon: <TrendingUp size={32} />,
-      color: "text-yellow-400",
-    },
-    {
-      title: "Mock Interview",
-      value: "81%",
-      icon: <Briefcase size={32} />,
-      color: "text-pink-400",
-    },
-  ];
+  const user = JSON.parse(localStorage.getItem("careerpilotUser"));
 
   return (
-    <div className="flex bg-slate-950 text-white min-h-screen">
+    <MainLayout>
 
-      {/* Sidebar */}
-      <Sidebar />
+      <h1 className="text-5xl font-bold text-white">
+        Welcome{user?.name ? `, ${user.name}` : ""} 👋
+      </h1>
 
-      {/* Main Content */}
-      <div className="flex-1">
+      <p className="text-slate-400 mt-3 mb-10">
+        Ready to continue your AI-powered career journey?
+      </p>
 
-        {/* Header */}
-        <div className="border-b border-slate-800 px-8 py-6 flex justify-between items-center">
+      {/* Quick Stats */}
 
-          <div>
-            <h1 className="text-3xl font-bold">
-              Dashboard
-            </h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
 
-            <p className="text-slate-400 mt-2">
-              Welcome back, Nameera 👋
-            </p>
-          </div>
+        <Card>
 
-          <div className="bg-slate-800 p-3 rounded-full">
-            <User size={28} />
-          </div>
+          <FileText className="text-cyan-400 mb-4" size={36} />
 
-        </div>
+          <h2 className="text-xl font-semibold text-white">
+            Resume
+          </h2>
 
-        {/* Dashboard Cards */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 p-8">
+          <p className="text-slate-400 mt-2">
+            Not Uploaded
+          </p>
 
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="bg-slate-900 rounded-2xl p-6 hover:scale-105 transition duration-300 shadow-lg"
-            >
+        </Card>
 
-              <div className={`${card.color} mb-5`}>
-                {card.icon}
-              </div>
+        <Card>
 
-              <h2 className="text-slate-400">
-                {card.title}
-              </h2>
+          <Brain className="text-cyan-400 mb-4" size={36} />
 
-              <p className="text-3xl font-bold mt-2">
-                {card.value}
-              </p>
+          <h2 className="text-xl font-semibold text-white">
+            Career Guidance
+          </h2>
 
-            </div>
-          ))}
+          <p className="text-slate-400 mt-2">
+            Not Generated
+          </p>
 
-        </div>
+        </Card>
 
-        {/* Recent Activity */}
-        <div className="px-8 pb-8">
+        <Card>
 
-          <div className="bg-slate-900 rounded-2xl p-8">
+          <Map className="text-cyan-400 mb-4" size={36} />
 
-            <h2 className="text-2xl font-bold mb-6">
-              Recent Activity
-            </h2>
+          <h2 className="text-xl font-semibold text-white">
+            Roadmap
+          </h2>
 
-            <div className="space-y-5">
+          <p className="text-slate-400 mt-2">
+            Not Started
+          </p>
 
-              <div className="flex justify-between border-b border-slate-800 pb-3">
-                <span>Resume uploaded</span>
-                <span className="text-green-400">
-                  Completed
-                </span>
-              </div>
+        </Card>
 
-              <div className="flex justify-between border-b border-slate-800 pb-3">
-                <span>Career roadmap generated</span>
-                <span className="text-cyan-400">
-                  Ready
-                </span>
-              </div>
+        <Card>
 
-              <div className="flex justify-between border-b border-slate-800 pb-3">
-                <span>Mock interview</span>
-                <span className="text-yellow-400">
-                  Pending
-                </span>
-              </div>
+          <Mic className="text-cyan-400 mb-4" size={36} />
 
-            </div>
+          <h2 className="text-xl font-semibold text-white">
+            Interview Prep
+          </h2>
 
-          </div>
+          <p className="text-slate-400 mt-2">
+            0 Questions Completed
+          </p>
 
-        </div>
+        </Card>
 
       </div>
 
-    </div>
+      {/* Profile Completion */}
+
+      <Card>
+
+        <h2 className="text-2xl font-semibold text-white mb-4">
+          Complete Your Profile
+        </h2>
+
+        <p className="text-slate-400 mb-6">
+          Add your college, branch, year, skills, and career goals to receive
+          personalized AI recommendations.
+        </p>
+
+        <Button text="Complete Profile" />
+
+      </Card>
+
+    </MainLayout>
   );
 }
 

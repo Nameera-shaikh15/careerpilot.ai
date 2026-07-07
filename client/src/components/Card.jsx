@@ -1,6 +1,8 @@
-function Card({ children }) {
+function Card({ children, className = "" }) {
   return (
-    <div className="bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-cyan-500/20 transition duration-300">
+    <div
+      className={`bg-slate-800 rounded-2xl p-8 shadow-lg border border-slate-700 ${className}`}
+    >
       {children}
     </div>
   );

@@ -1,25 +1,82 @@
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import ResumeAnalyzer from "./pages/ResumeAnalyzer";
-import Dashboard from "./pages/Dashboard";
-import Roadmap from "./pages/Roadmap";
-import Profile from "./pages/Profile";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import CareerGuidance from "./pages/CareerGuidance";
+import Roadmap from "./pages/Roadmap";
 import InterviewPrep from "./pages/InterviewPrep";
+import Profile from "./pages/Profile";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
+
+      {/* Public Routes */}
       <Route path="/" element={<Home />} />
-      <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/roadmap" element={<Roadmap />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/career-guidance" element={<CareerGuidance />} />
-      <Route path="/interview-prep" element={<InterviewPrep />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Protected Routes */}
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/resume-analyzer"
+        element={
+          <ProtectedRoute>
+            <ResumeAnalyzer />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/career-guidance"
+        element={
+          <ProtectedRoute>
+            <CareerGuidance />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/roadmap"
+        element={
+          <ProtectedRoute>
+            <Roadmap />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/interview-prep"
+        element={
+          <ProtectedRoute>
+            <InterviewPrep />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 }

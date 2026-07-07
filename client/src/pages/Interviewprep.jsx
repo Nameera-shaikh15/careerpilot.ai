@@ -1,19 +1,61 @@
-import { useState } from "react";
-import {
-  Brain,
-  Mic,
-  Timer,
-  CheckCircle,
-  Star,
-} from "lucide-react";
-
+import { useState, useRef } from "react";
+import { Mic, Square, Briefcase, BookOpen } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Card from "../components/Card";
 import Button from "../components/Button";
 
 function InterviewPrep() {
-  const [role, setRole] = useState("");
-  const [difficulty, setDifficulty] = useState("");
+  const [jobRole, setJobRole] = useState("");
+  const [company, setCompany] = useState("");
+  const [topic, setTopic] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [listening, setListening] = useState(false);
+
+  const recognitionRef = useRef(null);
+
+  const startRecording = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech Recognition is not supported in your browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.continuous = true;
+
+    recognition.onstart = () => {
+      setListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      let transcript = "";
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+
+      setAnswer(transcript);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognition.start();
+
+    recognitionRef.current = recognition;
+  };
+
+  const stopRecording = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-white">
@@ -22,16 +64,16 @@ function InterviewPrep() {
 
       <div className="flex-1 p-10">
 
-        <h1 className="text-5xl font-bold">
+        <h1 className="text-5xl font-bold mb-3">
           AI Interview Preparation
         </h1>
 
-        <p className="text-slate-400 mt-3">
-          Practice interviews with AI, receive instant feedback,
-          and improve your confidence.
+        <p className="text-slate-400 mb-10">
+          Select a job role, company, or topic. Practice answering
+          interview questions using voice or text.
         </p>
 
-        <div className="grid lg:grid-cols-2 gap-8 mt-10">
+        <div className="grid lg:grid-cols-2 gap-8">
 
           {/* Left */}
 
@@ -42,43 +84,42 @@ function InterviewPrep() {
             </h2>
 
             <label className="block mb-2">
-              Desired Job Role
+              Job Role
             </label>
 
             <input
               type="text"
-              placeholder="Example: AI Engineer"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 mb-6"
+              placeholder="Frontend Developer"
+              value={jobRole}
+              onChange={(e) => setJobRole(e.target.value)}
+              className="w-full bg-slate-900 p-4 rounded-xl mb-5"
             />
 
             <label className="block mb-2">
-              Difficulty Level
-            </label>
-
-            <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 mb-6"
-            >
-              <option value="">Select Difficulty</option>
-              <option>Easy</option>
-              <option>Medium</option>
-              <option>Hard</option>
-            </select>
-
-            <label className="block mb-2">
-              Number of Questions
+              Company
             </label>
 
             <input
-              type="number"
-              placeholder="10"
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 mb-8"
+              type="text"
+              placeholder="Google / Amazon / Microsoft"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="w-full bg-slate-900 p-4 rounded-xl mb-5"
             />
 
-            <Button text="Start AI Interview" />
+            <label className="block mb-2">
+              Topic
+            </label>
+
+            <input
+              type="text"
+              placeholder="Stacks"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full bg-slate-900 p-4 rounded-xl mb-8"
+            />
+
+            <Button text="Generate Interview Questions" />
 
           </Card>
 
@@ -87,115 +128,49 @@ function InterviewPrep() {
           <Card>
 
             <div className="flex items-center gap-3 mb-6">
-              <Brain className="text-cyan-400" />
+              <BookOpen className="text-cyan-400" />
               <h2 className="text-2xl font-semibold">
-                AI Interview Preview
+                Sample Question
               </h2>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-6 border border-slate-700">
+            <div className="bg-slate-900 rounded-xl p-6 mb-6">
 
-              <div className="flex items-center gap-2 mb-5">
-                <Timer className="text-yellow-400" />
-                <span>Question 1 of 10</span>
-              </div>
-
-              <h3 className="text-xl font-semibold">
-                Explain the difference between Machine Learning and Deep Learning.
-              </h3>
-
-              <textarea
-                rows="6"
-                placeholder="Type your answer here..."
-                className="w-full bg-slate-800 rounded-xl border border-slate-700 mt-6 p-4"
-              />
-
-              <div className="mt-6">
-                <Button text="Submit Answer" />
-              </div>
+              <p className="text-lg">
+                Explain the difference between a Stack and a Queue.
+              </p>
 
             </div>
 
-          </Card>
+            <textarea
+              rows="8"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="Type your answer or use Voice Recording..."
+              className="w-full bg-slate-900 rounded-xl p-5 resize-none mb-6"
+            />
 
-        </div>
+            <div className="flex gap-4">
 
-        {/* Feedback */}
+              {!listening ? (
+                <button
+                  onClick={startRecording}
+                  className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-xl"
+                >
+                  <Mic size={20} />
+                  Start Recording
+                </button>
+              ) : (
+                <button
+                  onClick={stopRecording}
+                  className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-6 py-3 rounded-xl"
+                >
+                  <Square size={20} />
+                  Stop Recording
+                </button>
+              )}
 
-        <div className="mt-10">
-
-          <Card>
-
-            <div className="flex items-center gap-3 mb-6">
-              <CheckCircle className="text-green-400" />
-              <h2 className="text-2xl font-semibold">
-                AI Feedback
-              </h2>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-
-              <div className="bg-slate-900 rounded-xl p-6">
-
-                <Mic className="text-cyan-400 mb-3" />
-
-                <h3 className="font-bold">
-                  Communication
-                </h3>
-
-                <p className="text-slate-400 mt-2">
-                  8 / 10
-                </p>
-
-              </div>
-
-              <div className="bg-slate-900 rounded-xl p-6">
-
-                <Brain className="text-green-400 mb-3" />
-
-                <h3 className="font-bold">
-                  Technical Knowledge
-                </h3>
-
-                <p className="text-slate-400 mt-2">
-                  9 / 10
-                </p>
-
-              </div>
-
-              <div className="bg-slate-900 rounded-xl p-6">
-
-                <Star className="text-yellow-400 mb-3" />
-
-                <h3 className="font-bold">
-                  Confidence
-                </h3>
-
-                <p className="text-slate-400 mt-2">
-                  8.5 / 10
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="mt-8">
-
-              <h3 className="text-xl font-bold mb-4">
-                AI Suggestions
-              </h3>
-
-              <ul className="space-y-3 text-slate-300">
-
-                <li>✔ Speak with more confidence.</li>
-
-                <li>✔ Use real-world examples while answering.</li>
-
-                <li>✔ Explain concepts step-by-step.</li>
-
-                <li>✔ Improve technical terminology.</li>
-
-              </ul>
+              <Button text="Submit Answer" />
 
             </div>
 

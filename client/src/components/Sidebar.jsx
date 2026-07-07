@@ -1,70 +1,103 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
-  Map,
   Brain,
-  Briefcase,
+  Map,
+  Mic,
   User,
+  LogOut,
 } from "lucide-react";
 
 function Sidebar() {
-  const menu = [
+  const menuItems = [
     {
-      title: "Dashboard",
+      name: "Dashboard",
       icon: <LayoutDashboard size={20} />,
       path: "/dashboard",
     },
     {
-      title: "Resume Analyzer",
+      name: "Resume Analyzer",
       icon: <FileText size={20} />,
       path: "/resume-analyzer",
     },
     {
-      title: "Roadmap",
-      icon: <Map size={20} />,
-      path: "/roadmap",
-    },
-    {
-      title: "Career Guidance",
+      name: "Career Guidance",
       icon: <Brain size={20} />,
       path: "/career-guidance",
     },
     {
-      title: "Interview Prep",
-      icon: <Briefcase size={20} />,
+      name: "Roadmap",
+      icon: <Map size={20} />,
+      path: "/roadmap",
+    },
+    {
+      name: "Interview Prep",
+      icon: <Mic size={20} />,
       path: "/interview-prep",
     },
     {
-      title: "Profile",
+      name: "Profile",
       icon: <User size={20} />,
       path: "/profile",
     },
   ];
 
   return (
-    <div className="w-72 bg-slate-900 min-h-screen p-6 border-r border-slate-800">
+    <aside className="w-72 min-h-screen bg-slate-900 border-r border-slate-700 flex flex-col">
 
-      <h1 className="text-3xl font-bold text-cyan-400 mb-10">
-        CareerPilot
-      </h1>
+      {/* Logo */}
+      <div className="p-8 border-b border-slate-700">
 
-      <div className="space-y-4">
+        <Link
+          to="/"
+          className="text-2xl font-bold text-cyan-400 hover:text-cyan-300 hover:scale-105 transition inline-block"
+        >
+          CareerPilot AI 🚀
+        </Link>
 
-        {menu.map((item, index) => (
-          <Link
-            key={index}
-            to={item.path}
-            className="flex items-center gap-4 p-4 rounded-xl text-slate-300 hover:bg-cyan-500 hover:text-white transition"
-          >
-            {item.icon}
-            {item.title}
-          </Link>
-        ))}
+        <p className="text-slate-400 text-sm mt-2">
+          AI Career Assistant
+        </p>
 
       </div>
 
-    </div>
+      {/* Navigation */}
+      <nav className="flex-1 p-5 space-y-3">
+
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                isActive
+                  ? "bg-cyan-500 text-white"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-cyan-400"
+              }`
+            }
+          >
+            {item.icon}
+            <span>{item.name}</span>
+          </NavLink>
+        ))}
+
+      </nav>
+
+      {/* Logout */}
+      <div className="p-5 border-t border-slate-700">
+
+        <NavLink
+          to="/login"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition"
+        >
+          <LogOut size={20} />
+          <span>Logout</span>
+        </NavLink>
+
+      </div>
+
+    </aside>
   );
 }
 
