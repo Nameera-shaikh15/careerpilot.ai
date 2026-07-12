@@ -4,11 +4,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Learn from "./pages/Learn";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import CareerGuidance from "./pages/CareerGuidance";
 import Roadmap from "./pages/Roadmap";
 import InterviewPrep from "./pages/InterviewPrep";
+import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -33,10 +36,10 @@ function App() {
       />
 
       <Route
-        path="/resume-analyzer"
+        path="/learn"
         element={
           <ProtectedRoute>
-            <ResumeAnalyzer />
+            <Learn />
           </ProtectedRoute>
         }
       />
@@ -46,6 +49,15 @@ function App() {
         element={
           <ProtectedRoute>
             <CareerGuidance />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/resume-analyzer"
+        element={
+          <ProtectedRoute>
+            <ResumeAnalyzer />
           </ProtectedRoute>
         }
       />
@@ -69,10 +81,28 @@ function App() {
       />
 
       <Route
+        path="/progress"
+        element={
+          <ProtectedRoute>
+            <Progress />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/profile"
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />

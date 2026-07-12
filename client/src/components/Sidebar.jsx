@@ -1,15 +1,22 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
+  GraduationCap,
   FileText,
   Brain,
   Map,
   Mic,
+  BarChart3,
   User,
+  Settings,
   LogOut,
 } from "lucide-react";
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("careerpilotUser"));
+
   const menuItems = [
     {
       name: "Dashboard",
@@ -17,9 +24,9 @@ function Sidebar() {
       path: "/dashboard",
     },
     {
-      name: "Resume Analyzer",
-      icon: <FileText size={20} />,
-      path: "/resume-analyzer",
+      name: "Learn with AI",
+      icon: <GraduationCap size={20} />,
+      path: "/learn",
     },
     {
       name: "Career Guidance",
@@ -27,7 +34,12 @@ function Sidebar() {
       path: "/career-guidance",
     },
     {
-      name: "Roadmap",
+      name: "Resume Analyzer",
+      icon: <FileText size={20} />,
+      path: "/resume-analyzer",
+    },
+    {
+      name: "Career Roadmap",
       icon: <Map size={20} />,
       path: "/roadmap",
     },
@@ -37,11 +49,26 @@ function Sidebar() {
       path: "/interview-prep",
     },
     {
+      name: "Progress",
+      icon: <BarChart3 size={20} />,
+      path: "/progress",
+    },
+    {
       name: "Profile",
       icon: <User size={20} />,
       path: "/profile",
     },
+    {
+      name: "Settings",
+      icon: <Settings size={20} />,
+      path: "/settings",
+    },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    navigate("/");
+  };
 
   return (
     <aside className="w-72 min-h-screen bg-slate-900 border-r border-slate-700 flex flex-col">
@@ -50,14 +77,14 @@ function Sidebar() {
       <div className="p-8 border-b border-slate-700">
 
         <Link
-          to="/"
-          className="text-2xl font-bold text-cyan-400 hover:text-cyan-300 hover:scale-105 transition inline-block"
+          to="/dashboard"
+          className="text-2xl font-bold text-cyan-400 hover:text-cyan-300 transition"
         >
           CareerPilot AI 🚀
         </Link>
 
         <p className="text-slate-400 text-sm mt-2">
-          AI Career Assistant
+          Welcome, {user?.name || "Learner"} 👋
         </p>
 
       </div>
@@ -87,13 +114,13 @@ function Sidebar() {
       {/* Logout */}
       <div className="p-5 border-t border-slate-700">
 
-        <NavLink
-          to="/login"
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition"
         >
           <LogOut size={20} />
           <span>Logout</span>
-        </NavLink>
+        </button>
 
       </div>
 
